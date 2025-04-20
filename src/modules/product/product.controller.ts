@@ -1,105 +1,37 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpStatus,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
+import { ProductDto } from './dto/create-product.dto';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Product } from './entities/product.entity';
 import { ProductService } from './product.service';
-import { ResponseData } from 'src/global/globalClass';
-import { httpMessage } from 'src/global/httpStatusEnum';
-import { Product } from 'src/models/product.model';
-import { ProductDto } from 'src/dto/product.dto';
 
 @Controller('products')
-export class productController {
-  constructor(private catsService: ProductService) {}
+export class ProductController {
+  constructor(private readonly productSevice: ProductService) {}
 
   @Get()
-  getProducts(): ResponseData<Product[]> {
-    try {
-      return new ResponseData<Product[]>(
-        this.catsService.getProducts(),
-        HttpStatus.OK,
-        httpMessage.OK,
-      );
-    } catch (error) {
-      return new ResponseData<Product[]>(
-        error.message,
-        HttpStatus.BAD_REQUEST,
-        httpMessage.BAD_REQUEST,
-      );
-    }
-  }
-
-  @Get(':id')
-  getDetailProduct(@Param('id') id: number): ResponseData<Product> {
-    try {
-      return new ResponseData<Product>(
-        this.catsService.getDetailProduct(id),
-        HttpStatus.OK,
-        httpMessage.OK,
-      );
-    } catch (error) {
-      return new ResponseData<Product>(
-        error.message,
-        HttpStatus.BAD_REQUEST,
-        httpMessage.BAD_REQUEST,
-      );
-    }
+  async getAllProducts(): Promise<Product[]> {
+    return this.productSevice.getAllProducts();
   }
 
   @Post()
-  createProduct(@Body() productDto: ProductDto): ResponseData<ProductDto> {
-    try {
-      return new ResponseData<ProductDto>(
-        productDto,
-        HttpStatus.OK,
-        httpMessage.OK,
-      );
-    } catch (error) {
-      return new ResponseData<ProductDto>(
-        error.message,
-        HttpStatus.BAD_REQUEST,
-        httpMessage.BAD_REQUEST,
-      );
-    }
+  createProduct(@Body() productDto: ProductDto): Promise<Product> {
+    return this.productSevice.createProduct(productDto);
   }
 
-  @Put()
-  updateProduct(): ResponseData<string> {
-    try {
-      return new ResponseData<string>(
-        this.catsService.updateProduct(),
-        HttpStatus.OK,
-        httpMessage.OK,
-      );
-    } catch (error) {
-      return new ResponseData<string>(
-        error.message,
-        HttpStatus.BAD_REQUEST,
-        httpMessage.BAD_REQUEST,
-      );
-    }
+  @Get('/:id')
+  async getProductById(@Param('id') id: number): Promise<Product> {
+    return this.productSevice.getProductById(id);
   }
 
-  @Delete()
-  deleteProduct(): ResponseData<string> {
-    try {
-      return new ResponseData<string>(
-        this.catsService.deleteProduct(),
-        HttpStatus.OK,
-        httpMessage.OK,
-      );
-    } catch (error) {
-      return new ResponseData<string>(
-        error.message,
-        HttpStatus.BAD_REQUEST,
-        httpMessage.BAD_REQUEST,
-      );
-    }
+  @Put('/:id')
+  async updateProduct(
+    @Param('id') id: string,
+    @Body() updateData: ProductDto,
+  ): Promise<Product> {
+    return this.productSevice.updateProduct(+id, updateData); // ép kiểu id về number
+  }
+
+  @Delete('/:id')
+  async deleteProduct(@Param('id') id: string): Promise<Product> {
+    return this.productSevice.deleteProduct(+id);
   }
 }
