@@ -5,10 +5,13 @@ import { UserModule } from './modules/user/user.module';
 import { ProductModule } from './modules/product/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './modules/product/entities/product.entity';
+import { CategoryModule } from './modules/category/category.module';
+import { Category } from './modules/category/entities/category.entity';
 @Module({
   imports: [
     ProductModule,
     UserModule,
+    CategoryModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -16,7 +19,7 @@ import { Product } from './modules/product/entities/product.entity';
       username: 'root',
       password: 'tungpro249',
       database: 'nestjs',
-      entities: [Product],
+      entities: [Product, Category],
       synchronize: true,
     }),
   ],

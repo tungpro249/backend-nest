@@ -1,5 +1,13 @@
 import { ProductDto } from './dto/create-product.dto';
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { Product } from './entities/product.entity';
 import { ProductService } from './product.service';
 
