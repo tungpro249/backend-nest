@@ -11,15 +11,15 @@ export class Post {
   @Column()
   slug: string;
 
-  @Column()
+  @Column('text')
   content: string;
 
   @Column()
   thumbnail_url: string;
 
-  @Column()
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @Column()
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 }
