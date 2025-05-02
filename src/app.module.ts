@@ -9,12 +9,14 @@ import { CategoryModule } from './modules/category/category.module';
 import { Category } from './modules/category/entities/category.entity';
 import { PostModule } from './modules/post/post.module';
 import { Post } from './modules/post/entities/post.entities';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 @Module({
   imports: [
     ProductModule,
     UserModule,
     CategoryModule,
     PostModule,
+    CloudinaryModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
