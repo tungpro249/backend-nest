@@ -1,8 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('post')
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
@@ -28,7 +38,7 @@ export class PostController {
   }
 
   @Delete(':id')
-  deletePost(@Param('id') id: string) { 
+  deletePost(@Param('id') id: string) {
     return this.postService.deletePost(id);
   }
 }

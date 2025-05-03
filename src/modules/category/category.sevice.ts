@@ -12,7 +12,7 @@ export class CategoryService {
   getAllCategories() {
     return 'getAllCategories';
   }
-  createCategory(data: any) {
+  createCategory(data: any): any {
     return 'createCategory';
   }
   updateCategory() {
