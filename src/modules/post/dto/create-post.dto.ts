@@ -8,4 +8,5 @@ export class CreatePostDto {
   content: string;
   @IsString()
   thumbnail_url: string;
+  slug?: string;
 }

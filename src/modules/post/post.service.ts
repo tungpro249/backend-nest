@@ -18,7 +18,7 @@ export class PostService {
   }
 
   async getPostById(id: string) {
-    return this.postRepo.findOne({ where: { id } });
+    return this.postRepo.findOne({ where: { id: +id } });
   }
 
   async createPost(data: CreatePostDto) {
