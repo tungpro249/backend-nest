@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { ResponseInterceptor } from './global/interceptors/response.interceptor';
 declare const module: any;
 
 async function bootstrap() {
@@ -13,6 +14,8 @@ async function bootstrap() {
       transform: true, // Tự động biến đổi dữ liệu về đúng kiểu
     }),
   );
+  app.useGlobalInterceptors(new ResponseInterceptor());
+
   const config = new DocumentBuilder()
     .setTitle('Swagger Document API')
     .setDescription('')
