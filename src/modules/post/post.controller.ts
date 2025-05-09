@@ -29,6 +29,7 @@ export class PostController {
 
   @Post()
   createPost(@Body() data: CreatePostDto): any {
+    console.log(data);
     return this.postService.createPost(data);
   }
 

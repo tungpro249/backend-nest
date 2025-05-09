@@ -13,8 +13,23 @@ export class PostService {
     private readonly postRepo: Repository<Post>,
   ) {}
 
-  async getPost() {
-    return this.postRepo.findAndCount();
+  async getPost(page: number = 1, limit: number = 10) {
+    const [data, totalItems] = await this.postRepo.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      data,
+      pagination: {
+        currentPage: page,
+        perPage: limit,
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+      },
+      message: 'thanh cong ',
+      code: 200,
+    };
   }
 
   async getPostById(id: string) {
@@ -24,8 +39,16 @@ export class PostService {
   async createPost(data: CreatePostDto) {
     const { title } = data;
     const slug = titleToSlug(title);
-    data = { ...data, slug };
-    return this.postRepo.save(data);
+    const postToCreate = this.postRepo.create({
+      ...data,
+      slug,
+    });
+    const savedPost = await this.postRepo.save(postToCreate);
+    return {
+      data: savedPost,
+      message: 'Thanh cong',
+      code: 200,
+    };
   }
 
   async updatePost(id: string, data: UpdatePostDto) {

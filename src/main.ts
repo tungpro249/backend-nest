@@ -18,6 +18,7 @@ async function bootstrap() {
     }),
   );
   app.useGlobalInterceptors(new ResponseInterceptor());
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('Swagger Document API')
@@ -27,7 +28,7 @@ async function bootstrap() {
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
-  await app.listen(process.env.PORT ?? 3005);
+  await app.listen(process.env.PORT ?? 5000);
 
   if (module.hot) {
     module.hot.accept();
