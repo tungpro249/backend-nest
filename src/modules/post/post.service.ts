@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { titleToSlug } from 'src/common/titleToSlug';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { paginateResponse } from 'src/common/util/paginate.util';
 
 @Injectable()
 export class PostService {
@@ -19,17 +20,7 @@ export class PostService {
       take: limit,
     });
 
-    return {
-      data,
-      pagination: {
-        currentPage: page,
-        perPage: limit,
-        totalItems,
-        totalPages: Math.ceil(totalItems / limit),
-      },
-      message: 'thanh cong ',
-      code: 200,
-    };
+    return paginateResponse(data, totalItems, page, limit);
   }
 
   async getPostById(id: string) {
