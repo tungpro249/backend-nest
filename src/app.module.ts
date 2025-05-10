@@ -10,8 +10,11 @@ import { Category } from './modules/category/entities/category.entity';
 import { PostModule } from './modules/post/post.module';
 import { Post } from './modules/post/entities/post.entities';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
+import { ConfigModule } from '@nestjs/config';
+
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     ProductModule,
     UserModule,
     CategoryModule,
@@ -19,11 +22,11 @@ import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
     CloudinaryModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'tungpro249',
-      database: 'nestjs',
+      host: process.env.DB_HOST,
+      port: +process.env.DB_PORT,
+      username: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [Product, Category, Post],
       synchronize: true,
     }),
