@@ -6,7 +6,6 @@ export class CreatePostDto {
   title: string;
   @IsString()
   content: string;
-  @IsString()
   thumbnail_url: string;
   slug?: string;
 }

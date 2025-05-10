@@ -6,11 +6,14 @@ import {
   Param,
   Post,
   Put,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('post')
 @Controller('post')
@@ -28,9 +31,12 @@ export class PostController {
   }
 
   @Post()
-  createPost(@Body() data: CreatePostDto): any {
-    console.log(data);
-    return this.postService.createPost(data);
+  @UseInterceptors(FileInterceptor('image'))
+  async createPost(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: CreatePostDto,
+  ) {
+    return this.postService.createPost(body, file); // truyền cả body + file
   }
 
   @Put(':id')

@@ -6,6 +6,7 @@ import { UploadApiResponse } from 'cloudinary';
 @Injectable()
 export class CloudinaryService {
   async uploadImage(file: Express.Multer.File): Promise<UploadApiResponse> {
+    console.log('fuckkk');
     return new Promise((resolve, reject) => {
       cloudinary.uploader
         .upload_stream({ resource_type: 'image' }, (error, result) => {

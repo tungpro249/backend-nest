@@ -6,12 +6,14 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { titleToSlug } from 'src/common/titleToSlug';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { paginateResponse } from 'src/common/util/paginate.util';
+import { CloudinaryService } from '../cloudinary/cloundinary.service';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(Post)
     private readonly postRepo: Repository<Post>,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   async getPost(page: number = 1, limit: number = 10) {
@@ -27,17 +29,24 @@ export class PostService {
     return this.postRepo.findOne({ where: { id: +id } });
   }
 
-  async createPost(data: CreatePostDto) {
+  async createPost(data: CreatePostDto, file?: Express.Multer.File) {
     const { title } = data;
     const slug = titleToSlug(title);
+
+    let imageUrl = null;
+    if (file) {
+      const uploadResult = await this.cloudinaryService.uploadImage(file);
+      imageUrl = uploadResult.secure_url;
+    }
     const postToCreate = this.postRepo.create({
       ...data,
       slug,
+      thumbnail_url: imageUrl,
     });
     const savedPost = await this.postRepo.save(postToCreate);
     return {
       data: savedPost,
-      message: 'Thanh cong',
+      message: 'Thành công',
       code: 200,
     };
   }
