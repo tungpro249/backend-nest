@@ -2,9 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
-import { ProductModule } from './modules/product/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Product } from './modules/product/entities/product.entity';
 import { CategoryModule } from './modules/category/category.module';
 import { Category } from './modules/category/entities/category.entity';
 import { PostModule } from './modules/post/post.module';
@@ -15,7 +13,6 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    ProductModule,
     UserModule,
     CategoryModule,
     PostModule,
@@ -27,7 +24,7 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Product, Category, Post],
+      entities: [Category, Post],
       synchronize: true,
     }),
   ],

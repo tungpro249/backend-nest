@@ -26,7 +26,8 @@ export class PostService {
   }
 
   async getPostById(id: string) {
-    return this.postRepo.findOne({ where: { id: +id } });
+    const post = await this.postRepo.findOne({ where: { id: +id } });
+    return { data: post, message: 'Thành công', code: 200 };
   }
 
   async createPost(data: CreatePostDto, file?: Express.Multer.File) {
