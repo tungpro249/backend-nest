@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './entities/post.entities';
 import { Repository } from 'typeorm';
@@ -30,6 +30,12 @@ export class PostService {
     return { data: post, message: 'Thành công', code: 200 };
   }
 
+  async getPostBySlug(slug: string) {
+    console.log('slug', slug);
+    const post = await this.postRepo.findOne({ where: { slug: slug } });
+    return { data: post, message: 'Thành công', code: 200 };
+  }
+
   async createPost(data: CreatePostDto, file?: Express.Multer.File) {
     const { title } = data;
     const slug = titleToSlug(title);
@@ -53,8 +59,14 @@ export class PostService {
   }
 
   async updatePost(id: string, data: UpdatePostDto) {
-    await this.postRepo.update(id, data);
-    return this.postRepo.findAndCount();
+    const post = await this.postRepo.findOneBy({ id });
+
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    const updated = this.postRepo.merge(post, data);
+    return await this.postRepo.save(updated);
   }
 
   async deletePost(id: string) {

@@ -25,9 +25,15 @@ export class PostController {
     return this.postService.getPost();
   }
 
-  @Get(':id')
+  @Get('id/:id')
   getPostById(@Param('id') id: string) {
     return this.postService.getPostById(id);
+  }
+
+  @Get(':slug')
+  getPostBySlug(@Param('slug') slug: string) {
+    console.log('slug', slug);
+    return this.postService.getPostBySlug(slug);
   }
 
   @Post()
@@ -36,7 +42,7 @@ export class PostController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: CreatePostDto,
   ) {
-    return this.postService.createPost(body, file); // truyền cả body + file
+    return this.postService.createPost(body, file);
   }
 
   @Put(':id')
