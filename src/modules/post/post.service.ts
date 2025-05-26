@@ -58,7 +58,7 @@ export class PostService {
   }
 
   async updatePost(id: string, data: UpdatePostDto) {
-    const post = await this.postRepo.findOneBy({ id });
+    const post = await this.postRepo.findOneBy({ id: +id });
 
     if (!post) {
       throw new NotFoundException('Post not found');
