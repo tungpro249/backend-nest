@@ -32,7 +32,6 @@ export class PostController {
 
   @Get(':slug')
   getPostBySlug(@Param('slug') slug: string) {
-    console.log('slug', slug);
     return this.postService.getPostBySlug(slug);
   }
 

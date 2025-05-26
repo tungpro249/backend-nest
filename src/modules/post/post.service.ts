@@ -31,7 +31,6 @@ export class PostService {
   }
 
   async getPostBySlug(slug: string) {
-    console.log('slug', slug);
     const post = await this.postRepo.findOne({ where: { slug: slug } });
     return { data: post, message: 'Thành công', code: 200 };
   }
