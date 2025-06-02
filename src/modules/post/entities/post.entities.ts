@@ -15,6 +15,9 @@ export class Post {
   content: string;
 
   @Column()
+  short_description: string;
+
+  @Column()
   thumbnail_url: string;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
