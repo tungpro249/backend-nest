@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Category } from 'src/modules/category/entities/category.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Post {
@@ -17,8 +24,12 @@ export class Post {
   @Column()
   short_description: string;
 
-  @Column()
+  @Column({ nullable: true })
   thumbnail_url: string;
+
+  @ManyToOne(() => Category, (category) => category.posts)
+  @JoinColumn({ name: 'id' })
+  category: Category;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;

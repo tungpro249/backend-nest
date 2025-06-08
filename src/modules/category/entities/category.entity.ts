@@ -1,7 +1,9 @@
+import { Post } from 'src/modules/post/entities/post.entities';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -16,6 +18,9 @@ export class Category {
 
   @Column({ nullable: true })
   imgage_url: string;
+
+  @OneToMany(() => Post, (post) => post.category)
+  posts: Post[];
 
   @CreateDateColumn()
   created_at: Date;
