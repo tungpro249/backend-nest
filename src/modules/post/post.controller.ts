@@ -53,4 +53,9 @@ export class PostController {
   deletePost(@Param('id') id: string) {
     return this.postService.deletePost(id);
   }
+
+  @Get('category/:category_id')
+  getPostFromCategory(@Param('category_id') category_id: string) {
+    return this.postService.getPostFromCategory(category_id, 1, 10);
+  }
 }

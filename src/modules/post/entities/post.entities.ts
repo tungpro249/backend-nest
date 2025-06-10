@@ -28,8 +28,11 @@ export class Post {
   thumbnail_url: string;
 
   @ManyToOne(() => Category, (category) => category.posts)
-  @JoinColumn({ name: 'id' })
+  @JoinColumn({ name: 'categoryId' })
   category: Category;
+
+  @Column({ nullable: true })
+  category_id: number;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;

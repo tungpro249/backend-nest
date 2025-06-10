@@ -72,4 +72,19 @@ export class PostService {
     await this.postRepo.delete(id);
     return this.postRepo.findAndCount();
   }
+
+  async getPostFromCategory(
+    category: string,
+    page: number = 1,
+    limit: number = 10,
+  ) {
+    console.log('fucking', category);
+    const [data, totalItems] = await this.postRepo.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+      where: { category_id: +category },
+    });
+
+    return paginateResponse(data, totalItems, page, limit);
+  }
 }
