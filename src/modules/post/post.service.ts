@@ -42,6 +42,7 @@ export class PostService {
     const postToCreate = this.postRepo.create({
       ...data,
       slug,
+      category_id: Number(data.category_id),
       thumbnail_url: imageUrl,
     });
     const savedPost = await this.postRepo.save(postToCreate);
@@ -59,7 +60,10 @@ export class PostService {
       throw new NotFoundException('Post not found');
     }
 
-    const updated = this.postRepo.merge(post, data);
+    const updated = this.postRepo.merge(post, {
+      ...data,
+      category_id: data.category_id ? +data.category_id : undefined,
+    });
     return await this.postRepo.save(updated);
   }
 
