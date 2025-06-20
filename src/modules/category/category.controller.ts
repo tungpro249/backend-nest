@@ -19,6 +19,7 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 import { CategoryService } from './category.sevice';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 
 @ApiTags('categories')
 @Controller('categories')
@@ -26,44 +27,42 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all categories with pagination' })
+  @ApiOperation({ summary: 'Danh sách categories' })
   @ApiQuery({
     name: 'page',
     required: false,
     type: Number,
-    description: 'Page number (default: 1)',
+    description: 'Page number (mặc định: 1)',
   })
   @ApiQuery({
     name: 'limit',
     required: false,
     type: Number,
-    description: 'Items per page (default: 10)',
+    description: 'Items per page (mặc định: 10)',
   })
   @ApiResponse({
     status: 200,
-    description: 'List of categories with pagination metadata',
+    description: 'Danh sách categories thành công',
   })
-  async getAllCategories(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
-  ) {
+  async getAllCategories(@Query() query: PaginationQueryDto) {
+    const { page, limit } = query;
     return this.categoryService.getAllCategories(page, limit);
   }
 
   @Post()
-  @ApiOperation({ summary: 'Create a new category' })
+  @ApiOperation({ summary: 'Thêm mô tả category' })
   @ApiResponse({
     status: 200,
-    description: 'Category created successfully',
+    description: 'Thêm mô tả category thành công',
     type: Category,
   })
-  @ApiResponse({ status: 400, description: 'Invalid input data' })
+  @ApiResponse({ status: 400, description: 'Bad request' })
   async createCategory(@Body() data: CreateCategoryDto) {
     return this.categoryService.createCategory(data);
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Update an existing category' })
+  @ApiOperation({ summary: 'Cập nhật category' })
   @ApiParam({
     name: 'id',
     required: true,
@@ -72,10 +71,10 @@ export class CategoryController {
   })
   @ApiResponse({
     status: 200,
-    description: 'Category updated successfully',
+    description: 'Cập nhật category thành công',
     type: Category,
   })
-  @ApiResponse({ status: 404, description: 'Category not found' })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy category' })
   async updateCategory(
     @Param('id') id: number,
     @Body() data: UpdateCategoryDto,
@@ -84,15 +83,15 @@ export class CategoryController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a category' })
+  @ApiOperation({ summary: 'Xóa category' })
   @ApiParam({
     name: 'id',
     required: true,
     type: Number,
     description: 'Category ID',
   })
-  @ApiResponse({ status: 200, description: 'Category deleted successfully' })
-  @ApiResponse({ status: 404, description: 'Category not found' })
+  @ApiResponse({ status: 200, description: 'Xóa category thành công' })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy category' })
   async deleteCategory(@Param('id') id: number) {
     return this.categoryService.deleteCategory(id);
   }

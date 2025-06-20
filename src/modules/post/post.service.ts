@@ -25,11 +25,6 @@ export class PostService {
     return paginateResponse(data, totalItems, page, limit);
   }
 
-  async getPostById(id: string) {
-    const post = await this.postRepo.findOne({ where: { id: +id } });
-    return { data: post, message: 'Thành công', code: 200 };
-  }
-
   async getPostBySlug(slug: string) {
     const post = await this.postRepo.findOne({ where: { slug: slug } });
     return { data: post, message: 'Thành công', code: 200 };
