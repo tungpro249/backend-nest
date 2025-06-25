@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -32,8 +33,12 @@ export class PostController {
     status: 200,
     description: 'Lấy danh sách bài viết thành công',
   })
-  async getPost() {
-    return this.postService.getPost();
+  async getPost(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('key_search') key_search?: string,
+  ) {
+    return this.postService.getPost(+page, +limit, key_search);
   }
 
   @Get(':slug')

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './entities/post.entities';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { titleToSlug } from 'src/common/titleToSlug';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -16,13 +16,19 @@ export class PostService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  async getPost(page: number = 1, limit: number = 10) {
+  async getPost(page?: number, limit?: number, key_search?: string) {
+    const currentPage = page && page > 0 ? page : 1;
+    const perPage = limit && limit > 0 ? limit : 10;
+
+    const whereClause = key_search ? { title: ILike(`%${key_search}%`) } : {};
+
     const [data, totalItems] = await this.postRepo.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
+      skip: (currentPage - 1) * perPage,
+      take: perPage,
+      where: whereClause,
     });
 
-    return paginateResponse(data, totalItems, page, limit);
+    return paginateResponse(data, totalItems, currentPage, perPage);
   }
 
   async getPostBySlug(slug: string) {
@@ -77,13 +83,16 @@ export class PostService {
     page: number = 1,
     limit: number = 10,
   ) {
-    console.log('fucking', category);
+    const categoryExists = await this.postRepo.findOneBy({ id: +category });
+    if (!categoryExists) {
+      throw new NotFoundException('Không tìm thấy danh mục');
+    }
+
     const [data, totalItems] = await this.postRepo.findAndCount({
       skip: (page - 1) * limit,
       take: limit,
       where: { category_id: +category },
     });
-
     return paginateResponse(data, totalItems, page, limit);
   }
 }
