@@ -49,6 +49,16 @@ export class CategoryController {
     return this.categoryService.getAllCategories(page, limit);
   }
 
+  @Get('/options')
+  @ApiOperation({ summary: 'Danh sách options categories' })
+  @ApiResponse({
+    status: 200,
+    description: 'Danh sách options categories',
+  })
+  async getAllCategoriesOptions() {
+    return this.categoryService.getAllCategoriesOptions();
+  }
+
   @Post()
   @ApiOperation({ summary: 'Thêm mô tả category' })
   @ApiResponse({

@@ -22,6 +22,13 @@ export class CategoryService {
     return paginateResponse(data, totalItems, page, limit);
   }
 
+  async getAllCategoriesOptions() {
+    const [data, totalItems] = await this.categoryRepo.find({
+      select: ['id', 'name'],
+    });
+    return { data, totalItems };
+  }
+
   async createCategory(data: CreateCategoryDto) {
     const postToCreate = this.categoryRepo.create({
       ...data,
