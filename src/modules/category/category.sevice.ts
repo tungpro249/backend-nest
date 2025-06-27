@@ -23,10 +23,10 @@ export class CategoryService {
   }
 
   async getAllCategoriesOptions() {
-    const [data, totalItems] = await this.categoryRepo.find({
+    const data = await this.categoryRepo.find({
       select: ['id', 'name'],
     });
-    return { data, totalItems };
+    return { data, totalItems: data.length };
   }
 
   async createCategory(data: CreateCategoryDto) {
