@@ -16,9 +16,9 @@ export class PostService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  async getPost(page?: number, limit?: number, key_search?: string) {
+  async getPost(page?: number, pageSize?: number, key_search?: string) {
     const currentPage = page && page > 0 ? page : 1;
-    const perPage = limit && limit > 0 ? limit : 10;
+    const perPage = pageSize && pageSize > 0 ? pageSize : 10;
 
     const whereClause = key_search ? { title: ILike(`%${key_search}%`) } : {};
 

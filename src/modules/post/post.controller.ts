@@ -35,10 +35,10 @@ export class PostController {
   })
   async getPost(
     @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query('pageSize') pageSize: number = 10,
     @Query('key_search') key_search?: string,
   ) {
-    return this.postService.getPost(+page, +limit, key_search);
+    return this.postService.getPost(+page, +pageSize, key_search);
   }
 
   @Get(':slug')
