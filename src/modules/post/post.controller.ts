@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Post,
   Put,
@@ -49,6 +50,21 @@ export class PostController {
   })
   getPostBySlug(@Param('slug') slug: string) {
     return this.postService.getPostBySlug(slug);
+  }
+
+  // Lấy danh sách bài viết liên quan
+  @Get(':slug/related')
+  @ApiOperation({ summary: 'Danh sách bài viết liên quan' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lấy danh sách bài viết liên quan',
+  })
+  async getRelatedPosts(@Param('slug') slug: string) {
+    const post = await this.postService.findBySlug(slug);
+
+    if (!post) throw new NotFoundException();
+
+    return this.postService.findRelatedPosts(post.category_id, slug);
   }
 
   @Post()

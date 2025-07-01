@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './entities/post.entities';
-import { ILike, Repository } from 'typeorm';
+import { ILike, Not, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { titleToSlug } from 'src/common/titleToSlug';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -26,6 +26,7 @@ export class PostService {
       skip: (currentPage - 1) * perPage,
       take: perPage,
       where: whereClause,
+      order: { created_at: 'DESC' },
     });
 
     return paginateResponse(data, totalItems, currentPage, perPage);
@@ -34,6 +35,20 @@ export class PostService {
   async getPostBySlug(slug: string) {
     const post = await this.postRepo.findOne({ where: { slug: slug } });
     return { data: post, message: 'Thành công', code: 200 };
+  }
+
+  async findBySlug(slug: string) {
+    const post = await this.postRepo.findOne({ where: { slug: slug } });
+    return post;
+  }
+
+  async findRelatedPosts(categoryId: number, slug: string) {
+    const post = await this.postRepo.findOne({ where: { slug: slug } });
+    const posts = await this.postRepo.find({
+      where: { category_id: categoryId, id: Not(post.id) },
+      order: { created_at: 'DESC' },
+    });
+    return { data: posts, message: 'Thành công', code: 200 };
   }
 
   async createPost(data: CreatePostDto, file?: Express.Multer.File) {
