@@ -7,11 +7,14 @@ import { titleToSlug } from 'src/common/titleToSlug';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { paginateResponse } from 'src/common/util/paginate.util';
 import { CloudinaryService } from '../cloudinary/cloundinary.service';
+import { Category } from '../category/entities/category.entity';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(Post)
+    @InjectRepository(Category)
+    private categoryRepo: Repository<Category>,
     private readonly postRepo: Repository<Post>,
     private readonly cloudinaryService: CloudinaryService,
   ) {}
@@ -25,10 +28,9 @@ export class PostService {
     const currentPage = page && page > 0 ? page : 1;
     const perPage = pageSize && pageSize > 0 ? pageSize : 10;
 
-    // Nếu có category_id thì kiểm tra danh mục tồn tại
     if (category_id) {
-      const categoryExists = await this.postRepo.findOneBy({
-        category_id: +category_id,
+      const categoryExists = await this.categoryRepo.findOneBy({
+        id: +category_id,
       });
       if (!categoryExists) {
         throw new NotFoundException('Không tìm thấy danh mục');
@@ -46,6 +48,10 @@ export class PostService {
       where: whereClause,
       order: { created_at: 'DESC' },
     });
+
+    if (data.length === 0) {
+      return paginateResponse([], totalItems, currentPage, perPage);
+    }
 
     return paginateResponse(data, totalItems, currentPage, perPage);
   }
