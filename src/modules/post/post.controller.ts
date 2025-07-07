@@ -38,8 +38,9 @@ export class PostController {
     @Query('page') page: number = 1,
     @Query('pageSize') pageSize: number = 10,
     @Query('key_search') key_search?: string,
+    @Query('category_id') category_id?: number,
   ) {
-    return this.postService.getPost(+page, +pageSize, key_search);
+    return this.postService.getPost(+page, +pageSize, key_search, category_id);
   }
 
   @Get(':slug')
