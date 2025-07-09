@@ -68,6 +68,26 @@ export class PostController {
     return this.postService.findRelatedPosts(post.category_id, slug);
   }
 
+  @Get('/newest')
+  @ApiOperation({ summary: 'Danh sách bài viết mới nhất' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lấy danh sách bài viết mới nhất',
+  })
+  getNewestPost() {
+    return this.postService.getNewestPost();
+  }
+
+  @Get('/hot')
+  @ApiOperation({ summary: 'Danh sách bài viết nổi bật' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lấy danh sách bài viết nổi bật',
+  })
+  getHotPost() {
+    return this.postService.getHotPost();
+  }
+
   @Post()
   @ApiOperation({ summary: 'Thêm bài viết bài viết' })
   @ApiConsumes('multipart/form-data') // ⚠️ Quan trọng: để Swagger hiện đúng form

@@ -13,9 +13,9 @@ import { Category } from '../category/entities/category.entity';
 export class PostService {
   constructor(
     @InjectRepository(Post)
-    @InjectRepository(Category)
-    private categoryRepo: Repository<Category>,
     private readonly postRepo: Repository<Post>,
+    @InjectRepository(Category)
+    private readonly categoryRepo: Repository<Category>,
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
@@ -73,6 +73,32 @@ export class PostService {
       order: { created_at: 'DESC' },
     });
     return { data: posts, message: 'Thành công', code: 200 };
+  }
+
+  async getNewestPost(page?: number, pageSize?: number) {
+    const currentPage = page && page > 0 ? page : 1;
+    const perPage = pageSize && pageSize > 0 ? pageSize : 10;
+    const [post, totalItems] = await this.postRepo.findAndCount({
+      order: { created_at: 'DESC' },
+      take: 5,
+    });
+    if (post.length === 0) {
+      return paginateResponse([], totalItems, currentPage, perPage);
+    }
+    return { data: post, message: 'Thành công', code: 200 };
+  }
+
+  async getHotPost(page?: number, pageSize?: number) {
+    const currentPage = page && page > 0 ? page : 1;
+    const perPage = pageSize && pageSize > 0 ? pageSize : 10;
+    const [post, totalItems] = await this.postRepo.findAndCount({
+      order: { views: 'DESC' },
+      take: 5,
+    });
+    if (post.length === 0) {
+      return paginateResponse([], totalItems, currentPage, perPage);
+    }
+    return paginateResponse(post, totalItems, currentPage, perPage);
   }
 
   async createPost(data: CreatePostDto, file?: Express.Multer.File) {

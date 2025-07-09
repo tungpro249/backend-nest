@@ -27,6 +27,9 @@ export class Post {
   @Column({ nullable: true })
   thumbnail_url: string;
 
+  @Column({ default: 0 })
+  views: number;
+
   @ManyToOne(() => Category, (category) => category.posts)
   @JoinColumn({ name: 'categoryId' })
   category: Category;
