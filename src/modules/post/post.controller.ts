@@ -38,8 +38,9 @@ export class PostController {
     @Query('page') page: number = 1,
     @Query('pageSize') pageSize: number = 10,
     @Query('key_search') key_search?: string,
+    @Query('category_id') category_id?: number,
   ) {
-    return this.postService.getPost(+page, +pageSize, key_search);
+    return this.postService.getPost(+page, +pageSize, key_search, category_id);
   }
 
   @Get(':slug')
@@ -65,6 +66,26 @@ export class PostController {
     if (!post) throw new NotFoundException();
 
     return this.postService.findRelatedPosts(post.category_id, slug);
+  }
+
+  @Get('/newest')
+  @ApiOperation({ summary: 'Danh sách bài viết mới nhất' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lấy danh sách bài viết mới nhất',
+  })
+  getNewestPost() {
+    return this.postService.getNewestPost();
+  }
+
+  @Get('/hot')
+  @ApiOperation({ summary: 'Danh sách bài viết nổi bật' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lấy danh sách bài viết nổi bật',
+  })
+  getHotPost() {
+    return this.postService.getHotPost();
   }
 
   @Post()

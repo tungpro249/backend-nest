@@ -1,26 +1,46 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './entities/post.entities';
-import { ILike, Not, Repository } from 'typeorm';
+import { FindOptionsWhere, ILike, Not, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { titleToSlug } from 'src/common/titleToSlug';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { paginateResponse } from 'src/common/util/paginate.util';
 import { CloudinaryService } from '../cloudinary/cloundinary.service';
+import { Category } from '../category/entities/category.entity';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(Post)
     private readonly postRepo: Repository<Post>,
+    @InjectRepository(Category)
+    private readonly categoryRepo: Repository<Category>,
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  async getPost(page?: number, pageSize?: number, key_search?: string) {
+  async getPost(
+    page?: number,
+    pageSize?: number,
+    key_search?: string,
+    category_id?: number,
+  ) {
     const currentPage = page && page > 0 ? page : 1;
     const perPage = pageSize && pageSize > 0 ? pageSize : 10;
 
-    const whereClause = key_search ? { title: ILike(`%${key_search}%`) } : {};
+    if (category_id) {
+      const categoryExists = await this.categoryRepo.findOneBy({
+        id: +category_id,
+      });
+      if (!categoryExists) {
+        throw new NotFoundException('Không tìm thấy danh mục');
+      }
+    }
+
+    const whereClause: FindOptionsWhere<Post> = {
+      ...(key_search ? { title: ILike(`%${key_search}%`) } : {}),
+      ...(category_id ? { category_id: +category_id } : {}),
+    };
 
     const [data, totalItems] = await this.postRepo.findAndCount({
       skip: (currentPage - 1) * perPage,
@@ -28,6 +48,10 @@ export class PostService {
       where: whereClause,
       order: { created_at: 'DESC' },
     });
+
+    if (data.length === 0) {
+      return paginateResponse([], totalItems, currentPage, perPage);
+    }
 
     return paginateResponse(data, totalItems, currentPage, perPage);
   }
@@ -50,6 +74,32 @@ export class PostService {
       take: 6,
     });
     return { data: posts, message: 'Thành công', code: 200 };
+  }
+
+  async getNewestPost(page?: number, pageSize?: number) {
+    const currentPage = page && page > 0 ? page : 1;
+    const perPage = pageSize && pageSize > 0 ? pageSize : 10;
+    const [post, totalItems] = await this.postRepo.findAndCount({
+      order: { created_at: 'DESC' },
+      take: 5,
+    });
+    if (post.length === 0) {
+      return paginateResponse([], totalItems, currentPage, perPage);
+    }
+    return { data: post, message: 'Thành công', code: 200 };
+  }
+
+  async getHotPost(page?: number, pageSize?: number) {
+    const currentPage = page && page > 0 ? page : 1;
+    const perPage = pageSize && pageSize > 0 ? pageSize : 10;
+    const [post, totalItems] = await this.postRepo.findAndCount({
+      order: { views: 'DESC' },
+      take: 5,
+    });
+    if (post.length === 0) {
+      return paginateResponse([], totalItems, currentPage, perPage);
+    }
+    return paginateResponse(post, totalItems, currentPage, perPage);
   }
 
   async createPost(data: CreatePostDto, file?: Express.Multer.File) {
