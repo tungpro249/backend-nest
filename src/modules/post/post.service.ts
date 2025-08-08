@@ -47,6 +47,7 @@ export class PostService {
     const posts = await this.postRepo.find({
       where: { category_id: categoryId, id: Not(post.id) },
       order: { created_at: 'DESC' },
+      take: 6,
     });
     return { data: posts, message: 'Thành công', code: 200 };
   }

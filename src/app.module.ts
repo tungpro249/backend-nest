@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryModule } from './modules/category/category.module';
 import { Category } from './modules/category/entities/category.entity';
@@ -9,11 +8,13 @@ import { PostModule } from './modules/post/post.module';
 import { Post } from './modules/post/entities/post.entities';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    UserModule,
+    AuthModule,
     CategoryModule,
     PostModule,
     CloudinaryModule,
@@ -27,6 +28,7 @@ import { ConfigModule } from '@nestjs/config';
       entities: [Category, Post],
       synchronize: true,
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
