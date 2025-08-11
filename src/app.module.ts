@@ -9,12 +9,14 @@ import { Post } from './modules/post/entities/post.entities';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './modules/user/users.module';
+import { User } from './modules/user/entities/user.entities';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     AuthModule,
+    UsersModule,
     CategoryModule,
     PostModule,
     CloudinaryModule,
@@ -25,7 +27,7 @@ import { UsersModule } from './users/users.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Category, Post],
+      entities: [Category, Post, User],
       synchronize: true,
     }),
     UsersModule,
