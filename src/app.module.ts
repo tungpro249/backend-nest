@@ -9,7 +9,7 @@ import { Post } from './modules/post/entities/post.entities';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
-import { UsersModule } from './modules/user/users.module';
+import { UsersModule } from './modules/user/user.module';
 import { User } from './modules/user/entities/user.entities';
 
 @Module({
@@ -30,7 +30,6 @@ import { User } from './modules/user/entities/user.entities';
       entities: [Category, Post, User],
       synchronize: true,
     }),
-    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

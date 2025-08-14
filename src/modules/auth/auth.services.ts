@@ -11,14 +11,14 @@ export class AuthService {
   ) {}
 
   async login(
-    username: string,
+    email: string,
     password: string,
   ): Promise<{ access_token: string }> {
-    const user = await this.usersService.findOne(username);
+    const user = await this.usersService.findOne(email);
     if (!user || user.password !== password) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const payload = { sub: user.id, username: user.username }; // ✅ dùng user.id
+    const payload = { sub: user.id, username: user.username };
     const token = await this.jwtService.signAsync(payload);
     return { access_token: token };
   }
@@ -27,7 +27,7 @@ export class AuthService {
     const payload = {
       username: body.username,
       email: body.email,
-      password: body.password, // ❌ chưa hash, chỉ dùng test
+      password: body.password,
     };
     return this.usersService.create(payload);
   }
