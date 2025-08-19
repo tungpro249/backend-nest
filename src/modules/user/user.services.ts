@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { User } from './entities/user.entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,12 +6,15 @@ import { CreateUserDto } from './dto/CreateUser.dto';
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
   constructor(
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
   ) {}
 
   async findOne(email: string): Promise<User | undefined> {
+    this.logger.log(`Find user by email: ${email}`);
+    this.logger.error(`User already exists: ${email}`);
     return await this.userRepo.findOne({ where: { email } });
   }
 
@@ -20,6 +23,7 @@ export class UsersService {
   ): Promise<{ data: User; message: string; code: number }> {
     const existingUser = await this.findOne(data.email);
     if (existingUser) {
+      this.logger.error('Error message');
       throw new ConflictException('Người dùng đã tồn tại trong hệ thống');
     }
 

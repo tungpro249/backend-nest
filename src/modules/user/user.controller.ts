@@ -6,7 +6,7 @@ import { Role } from 'src/common/enums/role.enum';
 @Controller('user')
 export class UserController {
   @UseGuards(AuthGuard)
-  @Roles(Role.User)
+  // @Roles(Role.Admin)
   @Get('profile')
   getAll() {
     return 'profile';

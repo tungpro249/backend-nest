@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { ConsoleLogger, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
@@ -8,7 +8,12 @@ import helmet from 'helmet';
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new ConsoleLogger('Bootstrap', {
+      logLevels: ['log', 'error', 'warn', 'debug'],
+      timestamp: true,
+    }),
+  });
   app.use(helmet());
   app.useGlobalPipes(
     new ValidationPipe({
@@ -27,6 +32,7 @@ async function bootstrap() {
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
+  app.setGlobalPrefix('/api/v1', { exclude: ['/'] });
   await app.listen(process.env.PORT ?? 5000);
 
   if (module.hot) {
