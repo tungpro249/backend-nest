@@ -90,7 +90,7 @@ export class PostController {
 
   @Post()
   @ApiOperation({ summary: 'Thêm bài viết bài viết' })
-  @ApiConsumes('multipart/form-data') // ⚠️ Quan trọng: để Swagger hiện đúng form
+  @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'Dữ liệu cần để tạo bài viết',
     type: CreatePostDto,

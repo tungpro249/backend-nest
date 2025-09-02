@@ -1,21 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Post } from './entities/post.entities';
+import { Posts } from './entities/post.entities';
 import { FindOptionsWhere, ILike, Not, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { titleToSlug } from 'src/common/titleToSlug';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { paginateResponse } from 'src/common/util/paginate.util';
 import { CloudinaryService } from '../cloudinary/cloundinary.service';
-import { Category } from '../category/entities/category.entity';
+import { Categories } from '../category/entities/category.entity';
 
 @Injectable()
 export class PostService {
   constructor(
-    @InjectRepository(Post)
-    private readonly postRepo: Repository<Post>,
-    @InjectRepository(Category)
-    private readonly categoryRepo: Repository<Category>,
+    @InjectRepository(Posts)
+    private readonly postRepo: Repository<Posts>,
+    @InjectRepository(Categories)
+    private readonly categoryRepo: Repository<Categories>,
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
@@ -37,7 +37,7 @@ export class PostService {
       }
     }
 
-    const whereClause: FindOptionsWhere<Post> = {
+    const whereClause: FindOptionsWhere<Posts> = {
       ...(key_search ? { title: ILike(`%${key_search}%`) } : {}),
       ...(category_id ? { category_id: +category_id } : {}),
     };

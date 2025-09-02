@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, Logger } from '@nestjs/common';
-import { User } from './entities/user.entities';
+import { Users } from './entities/user.entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/CreateUser.dto';
@@ -8,11 +8,11 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
   constructor(
-    @InjectRepository(User)
-    private readonly userRepo: Repository<User>,
+    @InjectRepository(Users)
+    private readonly userRepo: Repository<Users>,
   ) {}
 
-  async findOne(email: string): Promise<User | undefined> {
+  async findOne(email: string): Promise<Users | undefined> {
     this.logger.log(`Find user by email: ${email}`);
     this.logger.error(`User already exists: ${email}`);
     return await this.userRepo.findOne({ where: { email } });
@@ -20,7 +20,7 @@ export class UsersService {
 
   async create(
     data: CreateUserDto,
-  ): Promise<{ data: User; message: string; code: number }> {
+  ): Promise<{ data: Users; message: string; code: number }> {
     const existingUser = await this.findOne(data.email);
     if (existingUser) {
       this.logger.error('Error message');

@@ -1,4 +1,4 @@
-import { Post } from 'src/modules/post/entities/post.entities';
+import { Posts } from 'src/modules/post/entities/post.entities';
 import {
   Column,
   CreateDateColumn,
@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Category {
+export class Categories {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -17,10 +17,10 @@ export class Category {
   name: string;
 
   @Column({ nullable: true })
-  imgage_url: string;
+  image_url: string;
 
-  @OneToMany(() => Post, (post) => post.category)
-  posts: Post[];
+  @OneToMany(() => Posts, (post) => post.category)
+  posts: Posts[];
 
   @CreateDateColumn()
   created_at: Date;

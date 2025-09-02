@@ -1,4 +1,4 @@
-import { Category } from 'src/modules/category/entities/category.entity';
+import { Categories } from 'src/modules/category/entities/category.entity';
 import {
   Column,
   Entity,
@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Post {
+export class Posts {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -30,9 +30,9 @@ export class Post {
   @Column({ default: 0 })
   views: number;
 
-  @ManyToOne(() => Category, (category) => category.posts)
+  @ManyToOne(() => Categories, (category) => category.posts)
   @JoinColumn({ name: 'categoryId' })
-  category: Category;
+  category: Categories;
 
   @Column({ nullable: true })
   category_id: number;

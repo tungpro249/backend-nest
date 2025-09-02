@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { Category } from './entities/category.entity';
+import { Categories } from './entities/category.entity';
 import {
   ApiTags,
   ApiOperation,
@@ -64,7 +64,7 @@ export class CategoryController {
   @ApiResponse({
     status: 200,
     description: 'Thêm mô tả category thành công',
-    type: Category,
+    type: Categories,
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   async createCategory(@Body() data: CreateCategoryDto) {
@@ -82,7 +82,7 @@ export class CategoryController {
   @ApiResponse({
     status: 200,
     description: 'Cập nhật category thành công',
-    type: Category,
+    type: Categories,
   })
   @ApiResponse({ status: 404, description: 'Không tìm thấy category' })
   async updateCategory(
