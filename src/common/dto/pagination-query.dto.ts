@@ -1,14 +1,23 @@
-import { Type } from 'class-transformer';
-import { IsOptional, IsNumber } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsInt, Min, Max } from 'class-validator';
 
 export class PaginationQueryDto {
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
+  @Transform(({ value }) =>
+    value === undefined || value === null || String(value).trim() === ''
+      ? undefined
+      : Number(value),
+  )
+  @IsInt()
+  @Min(1)
   page: number = 1;
 
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
+  @Transform(({ value }) =>
+    value === undefined || value === null || String(value).trim() === ''
+      ? undefined
+      : Number(value),
+  )
+  @IsInt()
+  @Min(1)
+  @Max(100)
   limit: number = 10;
 }
