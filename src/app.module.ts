@@ -14,6 +14,7 @@ import { Users } from './modules/user/entities/user.entities';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './common/guards/roles.guard';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ContactModule } from './modules/contact/contact.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     CategoryModule,
     PostModule,
     CloudinaryModule,
+    ContactModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
