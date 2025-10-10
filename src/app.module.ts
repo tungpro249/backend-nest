@@ -15,6 +15,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './common/guards/roles.guard';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ContactModule } from './modules/contact/contact.module';
+import { SubscribeModule } from './modules/subscribe/subscribe.module';
+import { Subscriber } from './modules/subscribe/entities/subscriber.entity';
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { ContactModule } from './modules/contact/contact.module';
     PostModule,
     CloudinaryModule,
     ContactModule,
+    SubscribeModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
@@ -32,7 +35,7 @@ import { ContactModule } from './modules/contact/contact.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Categories, Posts, Users],
+      entities: [Categories, Posts, Users, Subscriber],
       synchronize: process.env.NODE_ENV !== 'production',
     }),
     ThrottlerModule.forRoot({

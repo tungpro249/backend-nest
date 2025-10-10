@@ -8,6 +8,8 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { paginateResponse } from 'src/common/util/paginate.util';
 import { CloudinaryService } from '../cloudinary/cloundinary.service';
 import { Categories } from '../category/entities/category.entity';
+import { EmailService } from '../email/email.service';
+import { SubscribersService } from '../subscribe/subscribe.sevice';
 
 @Injectable()
 export class PostService {
@@ -17,6 +19,8 @@ export class PostService {
     @InjectRepository(Categories)
     private readonly categoryRepo: Repository<Categories>,
     private readonly cloudinaryService: CloudinaryService,
+    private subscribersService: SubscribersService,
+    private mailService: EmailService,
   ) {}
 
   async getPost(
@@ -118,6 +122,16 @@ export class PostService {
       thumbnail_url: imageUrl,
     });
     const savedPost = await this.postRepo.save(postToCreate);
+
+    const subscribers = await this.subscribersService.findAll();
+    const postUrl = `${process.env.BASE_URL}/posts/${slug}`;
+    for (const sub of subscribers) {
+      await this.mailService.sendMail(
+        sub.email,
+        `Bài viết mới: ${title}`,
+        `<p>Blog vừa đăng bài viết mới: <a href="${postUrl}">${title}</a></p>`,
+      );
+    }
     return {
       data: savedPost,
       message: 'Thành công',

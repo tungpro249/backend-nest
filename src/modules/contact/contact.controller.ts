@@ -12,7 +12,7 @@ export class ContactController {
     const { name, email, message } = body;
 
     await this.emailService.sendMail(
-      email,
+      'tungt392@gmail.com',
       `Contact form: ${name}`,
       `Message from ${name} (${email}): ${message}`,
       `<h3>Message from ${name}</h3><p><b>Email:</b> ${email}</p><p>${message}</p>`,
