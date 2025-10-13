@@ -35,6 +35,7 @@ import { Subscriber } from './modules/subscribe/entities/subscriber.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
+      autoLoadEntities: true,
       entities: [Categories, Posts, Users, Subscriber],
       synchronize: process.env.NODE_ENV !== 'production',
     }),

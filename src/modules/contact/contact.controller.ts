@@ -1,6 +1,8 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { EmailService } from '../email/email.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Contact')
 @Controller('contact')
 export class ContactController {
   constructor(private readonly emailService: EmailService) {}
@@ -12,7 +14,7 @@ export class ContactController {
     const { name, email, message } = body;
 
     await this.emailService.sendMail(
-      'tungt392@gmail.com',
+     email,
       `Contact form: ${name}`,
       `Message from ${name} (${email}): ${message}`,
       `<h3>Message from ${name}</h3><p><b>Email:</b> ${email}</p><p>${message}</p>`,
