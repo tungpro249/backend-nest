@@ -36,8 +36,9 @@ import { Subscriber } from './modules/subscribe/entities/subscriber.entity';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       autoLoadEntities: true,
+      synchronize: true,
       entities: [Categories, Posts, Users, Subscriber],
-      synchronize: process.env.NODE_ENV !== 'production',
+      // synchronize: process.env.NODE_ENV !== 'production',
     }),
     ThrottlerModule.forRoot({
       throttlers: [
