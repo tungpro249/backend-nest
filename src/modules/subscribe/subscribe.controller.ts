@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Delete } from '@nestjs/common';
 import { SubscribersService } from './subscribe.sevice';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -15,5 +15,10 @@ export class SubscribersController {
   @Get()
   async findAll() {
     return this.subscribersService.findAll();
+  }
+
+  @Delete()
+  async delete(@Body('email') email: string) {
+    return this.subscribersService.delete(email);
   }
 }

@@ -20,6 +20,18 @@ export class SubscribersService {
     return { message: 'Đăng ký nhận thông báo thành công' };
   }
 
+  async findOne(email: string) {
+    return this.subscriberRepo.findOne({ where: { email } });
+  }
+
+  async delete(email: string) {
+    const subscriber = await this.subscriberRepo.findOne({ where: { email } });
+    if (!subscriber) return { message: 'Không tìm thấy người dùng' };
+    this.subscriberRepo.delete({ email });
+
+    return { message: 'Xóa người dùng thành công' };
+  }
+
   async findAll() {
     return this.subscriberRepo.find();
   }
