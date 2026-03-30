@@ -23,7 +23,11 @@ async function bootstrap() {
     }),
   );
   // app.useGlobalInterceptors(new ResponseInterceptor());
-  app.enableCors();
+  app.enableCors({
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
+    credentials: true,
+  });
+
 
   const config = new DocumentBuilder()
     .setTitle('Swagger Document API')

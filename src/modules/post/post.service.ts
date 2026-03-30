@@ -6,10 +6,10 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { titleToSlug } from 'src/common/titleToSlug';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { paginateResponse } from 'src/common/util/paginate.util';
-import { CloudinaryService } from '../cloudinary/cloundinary.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { Categories } from '../category/entities/category.entity';
 import { EmailService } from '../email/email.service';
-import { SubscribersService } from '../subscribe/subscribe.sevice';
+import { SubscribersService } from '../subscribe/subscribe.service';
 
 @Injectable()
 export class PostService {

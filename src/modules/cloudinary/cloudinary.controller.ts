@@ -6,7 +6,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CloudinaryService } from './cloundinary.service';
+import { CloudinaryService } from './cloudinary.service';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Upload')

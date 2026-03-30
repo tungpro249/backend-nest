@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Get, Delete } from '@nestjs/common';
-import { SubscribersService } from './subscribe.sevice';
+import { SubscribersService } from './subscribe.service';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Subscribers')

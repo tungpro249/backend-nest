@@ -20,6 +20,12 @@ export class AuthController {
   async login(@Body() body: LoginDto) {
     return await this.authService.login(body.email, body.password);
   }
+
+  @Post('google-login')
+  async googleLogin(@Body('idToken') idToken: string) {
+    return this.authService.googleLogin(idToken);
+  }
+
   @Post('register')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Register' })

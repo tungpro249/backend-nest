@@ -20,7 +20,9 @@ import { Subscriber } from './modules/subscribe/entities/subscriber.entity';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     AuthModule,
     UsersModule,
     CategoryModule,

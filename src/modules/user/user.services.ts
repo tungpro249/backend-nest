@@ -2,7 +2,7 @@ import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { Users } from './entities/user.entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/CreateUser.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
@@ -12,11 +12,14 @@ export class UsersService {
     private readonly userRepo: Repository<Users>,
   ) {}
 
-  async findOne(email: string): Promise<Users | undefined> {
-    this.logger.log(`Find user by email: ${email}`);
+async findOne(email: string): Promise<Users | undefined> {
+  const user = await this.userRepo.findOne({ where: { email } });
+  if (user) {
     this.logger.error(`User already exists: ${email}`);
-    return await this.userRepo.findOne({ where: { email } });
   }
+
+  return user;
+}
 
   async create(
     data: CreateUserDto,
